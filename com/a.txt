@@ -1,0 +1,117 @@
+
+<button @click = "goKind()">跳转到分类页面</button>
+			goKind(){
+				Toast('提示信息');
+//				this.$refs.picker.open();
+				this.sheetVisible = true;
+//				router.push("kind");
+//				router.replace("kind")
+//				window.history.pushState("kind")
+			}
+			
+			<template>
+<header class="header">
+	<div >
+			<span @click="toHome()">首页</span>
+			<span>ENJOY</span>
+			<span class="iconfont">长沙</span>
+			<span class="iconfont" @click="toLogin()">&#xe6e6;</span>
+			<span class="iconfont">&#xe651;</span>
+	</div>
+</header>
+</template>
+
+<script>
+	import router from "./../router/router.js";
+	import VueRouter from "vue-router";
+	import Vue from "vue";
+	Vue.use(VueRouter);
+	export default {
+		data(){
+			return {
+				
+			}
+		},methods:{
+			toCity(){
+				router.push({
+					path:'/city'
+					})
+			},
+			toHome(){
+				router.push({
+					path:'/home'
+					})
+			},
+			toLogin(){
+				router.push({
+					path:'/login'
+					})
+			}
+		},
+	}
+</script>
+
+<style scoped>
+</style>
+			
+			
+<template >
+	<div class="box">
+	  <ul>
+	  	<li>本地服务                                                                                                                                                                                                                                                     </li>
+	  	<li>全国送</li>
+	  </ul>
+	  <ul class="list">
+	    <li v-for="item in list" @click="todetail(item.product_id)">
+	      <img :src="item.product_image" />
+	      <div class="right">
+	      	<p>{{item.name}}</p>
+        <span class="xianjia">{{item.price/100}}元/位</span   ><span class="yuanjia">￥{{item.original_price/100}}</span>
+	      </div>
+	      
+	    </li>
+	  </ul>
+	</div>
+</template>
+
+<script>
+    import MyAjax from './../md/MyAjax'
+    import router from "./../router/router.js";
+	export default {
+		data(){
+			return {
+				word:this.$route.query.word,
+				list:[],
+				product_id:[]
+			}
+		},mounted(){
+		  
+      var that = this;
+      var word = that.word
+      var url = "https://api.ricebook.com/3/enjoy_product/search.json?city_id=104&keyword="+word+"&page=0"
+      MyAjax.fetch(url,function(data){
+        console.log(data.products)
+        that.list = data.products
+
+      },function(err){
+        console.log(err)
+      })
+    },
+    methods:{
+      todetail(product_id){
+        console.log(product_id)
+     router.push({path:"detail",query:{product_id:product_id}})
+      }
+    }
+	}
+</script>
+
+<style scoped>
+  ul{width: 100%;}
+  .list li{width: 90%;padding: 5%;position: relative;}
+  img{width: 50%;}
+  .right{width: 48%;float: right;}
+  .list li p{width: 100%;font-size: 14px;}
+  .list li .xianjia{font-size: 12px;color: red;padding: 5px 5px 0 0;}
+  .list li .yuanjia{font-size: 12px;color: #92969C;text-decoration: line-through;}
+</style>
